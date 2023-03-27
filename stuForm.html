@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    </head>
+
+    <style>
+        body {
+            height: 100vh;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        form {
+            width: 500px;
+            height: 800px
+        }
+        .popup{
+            width: 1000px;
+        }
+        .crud {
+            width: 100vw;
+            height: 100vh;
+            padding: 10px;
+        }
+    </style>
+
+    <body ng-app="stuFormApp" ng-controller="stuAppCntrllr" class="bg-secondary">
+        <div ng-if="formVw" class="col-lg-12 d-flex justify-content-center container ">
+            <form class="stuForm rounded-3 py-3 px-4 bg-light">
+                <h2 class="text-center mt-3">Student LogIn Form</h2>
+                <hr>
+            <!-- user Name -->
+                <div>
+                    <label class="form-label">Enter Username*</label>
+                    <input class="form-control" type="text" ng-model="oStuData.name" placeholder="User Name">
+                    <span ng-show="stuNameVld" class="text-danger">Please enter valid user name</span><br>
+                </div>
+            <!-- student reg no -->
+                <div>
+                    <label>Enter Register Number*</label>
+                    <input class="form-control" type="number" ng-model="oStuData.stuRegNo" placeholder=" Reg. No">
+                    <span ng-show="regNoVld" class="text-danger">please enter valid Register number</span><br>
+                </div>
+            <!-- Date of Birth -->
+                <div>
+                    <label>Enter Date Of Birth</label>
+                    <input class="form-control" type="date" ng-model="oStuData.stuDob">
+                    <span ng-show="dobVld" class="text-danger">Age should be atleast 18</span><br>
+                </div>
+            <!-- Gender -->
+                <div>
+                    <label>Select Gender</label><br>
+                    <select class="form-control" ng-model="oStuData.gender" ng-options="gender for gender in genders">
+                    </select><br>
+                </div>
+            <!-- Phone number -->
+                <div>
+                    <label>Enter Phone Number*</label>
+                    <input class="form-control" type="number" ng-model="oStuData.stuPhone" placeholder="Phone number">
+                    <span ng-show="phnVld" class="text-danger">Please enter valid phone number</span><br>
+                </div>
+            <!-- Email -->
+                <div>
+                    <label>Enter Email</label>
+                    <input class="form-control" type="email" ng-model="oStuData.eMail" placeholder="Email">
+                </div>
+            <!-- Agreement -->
+                <div>
+                    <label>Do You Agree With Terms and Conditions?</label><br>
+                    <input type="radio" ng-model="agreeVal" value="Yes" name="agree">
+                    <span>Yes</span><br>
+                    <input type="radio" ng-model="agreeVal" value="No" name="agree">
+                    <span>No</span><br>
+                </div>
+                <div class="mt-2">
+                <!-- submit button -->
+                    <button ng-disabled="agreeVal == 'No' || agreeVal == undefined"
+                        class="form-control btn btn-primary btns" ng-show="shwSmbtBtn" ng-click="smbtStuRcd()">SUBMIT</button>
+                <!-- update button -->
+                    <button class="form-control btn btn-warning btns" ng-hide="shwSmbtBtn"
+                        ng-click="updStuRcd()">UPDATE</button>
+                </div>
+            <!-- View Record Button -->
+                <div>
+                    <button class="form-control btn btn-primary btns mt-2" ng-click="vwStuRcds()">View records</button>
+                </div>
+            </form>
+        </div>
+        <!-- Crud table and popup -->
+        <div ng-if="!formVw" class="d-flex justify-content-center">
+            <div class="alert alert-warning alert-dismissible fade show d-flex justify-content-between popup " role="alert" ng-if="aStuData.length == 0">
+                <strong>No records found!</strong>
+                <button class="btn btn-warning" ng-click="addNwBtn()">Add New Record</button>
+            </div>
+
+            <div class=" crud rounded-5 table-responsive bg-light overflow-scroll scrollbar-primary "
+                ng-if="aStuData.length != 0">
+                <button class="btn btn-warning mt-3 col-sm-offset-5 mb-2" ng-if="aStuData.length > 0"
+                    ng-click="addNwBtn()">Add New Record</button>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Reg.No</th>
+                            <th>User Name</th>
+                            <th>DOB</th>
+                            <th>Contact</th>
+                            <th colspan="2" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="stuData in aStuData">
+                            <td>{{stuData.stuRegNo}}</td>
+                            <td>{{stuData.name}}</td>
+                            <td>{{stuData.stuDob | date: "dd-MM-yy"}}</td>
+                            <td>{{stuData.stuPhone}}</td>
+                            <td><button class="btn btn-primary" ng-click="edtStuRcrd($index)">EDIT</button></td>
+                            <td><button class="btn btn-primary" ng-click="dltStuRcrd($index)">DELETE</button></td>
+                        </tr>
+                    </tbody>
+                </table>    
+            </div>
+        </div>
+        <script src="stuForm.js"></script>
+    </body>
+
+    </html>
